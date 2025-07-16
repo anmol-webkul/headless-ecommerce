@@ -25,7 +25,7 @@
 
 Bagisto's GraphQL API enables a seamless, headless eCommerce experience built on Laravel. This API delivers ultra-fast, dynamic, and personalized shopping experiences through a scalable, open-source platform.
 
-**Read our full documentation: [Bagisto GraphQL API Docs](https://devdocs.bagisto.com/2.2/api/)**
+**Read our full documentation: [Bagisto GraphQL API Docs](https://devdocs.bagisto.com/2.3/api/graphql-api.html)**
 
 This API was developed in collaboration with the <a href="https://www.ucraft.com/">Ucraft Team</a>.
 
@@ -33,7 +33,7 @@ This API was developed in collaboration with the <a href="https://www.ucraft.com
 
 ### Requirements:
 
-- **Bagisto**: v2.2.2 or higher
+- **Bagisto**: v2.3.0
 
 ---
 
@@ -46,17 +46,35 @@ To install the Bagisto GraphQL API, follow these steps:
    Run the following command in your terminal to install the GraphQL API package:
 
    ```bash
-   composer require bagisto/graphql-api ^v2.2.2
+   composer require bagisto/graphql-api dev-main
    ```
 
 2. **Update Middleware Configuration**
 
-   In the `app/Http/Kernel.php` file, move the following middleware from the `web` section in the `middlewareGroups` array to the global `middleware` array:
+   In your `bootstrap/app.php` file, add the following session middleware changes:
 
    ```php
-   \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-   \Illuminate\Session\Middleware\StartSession::class,
+   use Illuminate\Session\Middleware\StartSession;
+   use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+
+   return Application::configure(basePath: dirname(__DIR__))
+      ->withMiddleware(function (Middleware $middleware) {
+         // ... rest of middleware setup
+
+         /**
+          * Remove session and cookie middleware from the 'web' middleware group.
+          */
+         $middleware->removeFromGroup('web', [StartSession::class, AddQueuedCookiesToResponse::class]);
+
+         /**
+          * Adding session and cookie middleware globally to apply across non-web routes (e.g. GraphQL)
+          */
+         $middleware->append([StartSession::class, AddQueuedCookiesToResponse::class]);
+      })
+      // ... rest of configuration
    ```
+
+   This ensures that session and cookie middleware are applied globally across all routes, including API and GraphQL endpoints.
 
 3. **Update Environment Settings**
 
@@ -94,6 +112,31 @@ To install the Bagisto GraphQL API, follow these steps:
    ```
    http://your-domain.com/graphql
    ```
+3. **Authorization**
+
+   To authorize requests for certain APIs, you may need to provide the `MOBIKUL_API_KEY`. 
+
+   1. **Locate the API Key**
+
+      Find the `MOBIKUL_API_KEY` in your `.env` file:
+
+      ```env
+      MOBIKUL_API_KEY=your-mobikul-api-key
+      ```
+
+   2. **Share with App Development Team**
+
+      Copy this key and securely share it with the Development team as required for API authorization.
+
+   3. **Using the API Key**
+
+      When making requests to protected admin endpoints, include the API key in the request headers:
+
+      ```
+      MOBIKUL_API_KEY: your-mobikul-api-key
+      ```
+
+      Replace `your-mobikul-api-key` with the actual value from your `.env` file.
 
 ---
 

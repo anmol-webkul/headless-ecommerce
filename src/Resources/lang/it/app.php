@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Attenzione: Registrazione cliente fallita.',
                 'success-verify'     => 'Account creato con successo, è stata inviata una e-mail per la verifica.',
+                'success'            => 'Successo: Cliente registrato e accesso effettuato con successo.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Avviso: Accesso social disabilitato.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Indirizzo eliminato con successo',
                     'not-found'              => 'Attenzione: Indirizzo non trovato.',
                     'update-success'         => 'Indirizzo aggiornato con successo.',
+                    'already-default'        => 'Avviso: Questo indirizzo è già impostato come predefinito.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'Il pagamento non è stato effettuato per questo download.',
                     'download-error' => 'Il link di download è scaduto.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Successo: Richiesta GDPR creata con successo.',
+                    'revoke-failed'        => 'Avviso: La richiesta GDPR non è stata revocata.',
+                    'revoked-successfully' => 'Successo: Richiesta GDPR revocata con successo.',
+                    'not-enabled'          => 'Avviso: Il GDPR non è abilitato.',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,15 @@ return [
                 'item-add-success'    => 'Successo: Prodotto aggiunto con successo alla lista di confronto.',
                 'remove-success'      => 'Successo: Articolo rimosso con successo dalla lista di confronto.',
                 'mass-remove-success' => 'Successo: Elementi selezionati eliminati con successo.',
+                'not-auth'            => 'Avviso: Non sei autorizzato a eseguire questa azione.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Successo: Recensione creata con successo.',
                 'delete-success'      => 'Successo: Recensione eliminata con successo.',
-                'not-found'           => 'Attenzione: Recensione non trovata.',
                 'mass-delete-success' => 'Successo: Recensioni selezionate eliminate con successo.',
+                'not-found'           => 'Attenzione: Recensione non trovata.',
+                'product-not-found'   => 'Avviso: Prodotto non trovato.',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => 'Attenzione: Fattura non trovata.',
                 'product-error'  => 'Attenzione: Prodotto non valido fornito.',
                 'create-success' => 'Successo: Fattura creata con successo.',
+                'invalid-qty'    => 'Avviso: Abbiamo trovato una quantità non valida per gli articoli da fatturare.',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => 'Cliente accesso effettuato con successo.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Indirizzo del cliente creato con successo.',
-                'default-update-success' => 'L\'indirizzo è impostato come predefinito',
-                'delete-success'         => 'Indirizzo del cliente eliminato con successo',
+                'default-update-success' => 'L\'indirizzo è impostato come predefinito.',
+                'delete-success'         => 'Indirizzo del cliente eliminato con successo.',
                 'not-found'              => 'Avviso: Indirizzo del cliente non trovato.',
                 'update-success'         => 'Indirizzo del cliente aggiornato con successo.',
+                'already-default'        => 'Avviso: Questo indirizzo è già impostato come predefinito.',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => 'Recensione eliminata con successo',
                 'not-found'      => 'Avviso: Recensione non trovata.',
                 'update-success' => 'Recensione aggiornata con successo.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Successo: Richiesta GDPR eliminata con successo.',
+                'not-found'      => 'Avviso: Richiesta GDPR non trovata.',
+                'update-success' => 'Richiesta GDPR aggiornata con successo.',
             ],
         ],
 

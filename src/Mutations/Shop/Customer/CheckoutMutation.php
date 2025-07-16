@@ -2,19 +2,23 @@
 
 namespace Webkul\GraphQLAPI\Mutations\Shop\Customer;
 
+use Webkul\Core\Rules\PostCode;
+use Webkul\Checkout\Facades\Cart;
+use Illuminate\Support\Facades\DB;
+use Webkul\Core\Rules\PhoneNumber;
+use Webkul\Payment\Facades\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Webkul\Shipping\Facades\Shipping;
+use Webkul\GraphQLAPI\Helper\PaymentHelper;
+use Webkul\Sales\Transformers\OrderResource;
+use Webkul\Sales\Repositories\OrderRepository;
+use Webkul\Sales\Repositories\InvoiceRepository;
+use Webkul\GraphQLAPI\Validators\CustomException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Webkul\CartRule\Repositories\CartRuleCouponRepository;
-use Webkul\Checkout\Facades\Cart;
-use Webkul\Core\Rules\PhoneNumber;
-use Webkul\Customer\Repositories\CustomerAddressRepository;
 use Webkul\GraphQLAPI\Repositories\NotificationRepository;
-use Webkul\GraphQLAPI\Validators\CustomException;
-use Webkul\Payment\Facades\Payment;
-use Webkul\Sales\Repositories\OrderRepository;
-use Webkul\Sales\Transformers\OrderResource;
-use Webkul\Shipping\Facades\Shipping;
+use Webkul\Customer\Repositories\CustomerAddressRepository;
 
 class CheckoutMutation extends Controller
 {
@@ -27,7 +31,9 @@ class CheckoutMutation extends Controller
         protected CartRuleCouponRepository $cartRuleCouponRepository,
         protected CustomerAddressRepository $customerAddressRepository,
         protected OrderRepository $orderRepository,
-        protected NotificationRepository $notificationRepository
+        protected NotificationRepository $notificationRepository,
+        protected InvoiceRepository $invoiceRepository,
+        protected PaymentHelper $paymentHelper
     ) {
         Auth::setDefaultDriver('api');
     }
@@ -180,12 +186,12 @@ class CheckoutMutation extends Controller
             "{$addressType}.company_name" => ['nullable'],
             "{$addressType}.first_name"   => ['required'],
             "{$addressType}.last_name"    => ['required'],
-            "{$addressType}.email"        => ['required'],
+            "{$addressType}.email"        => ['required', 'email'],
             "{$addressType}.address"      => ['required', 'array', 'min:1'],
             "{$addressType}.city"         => ['required'],
-            "{$addressType}.country"      => ['required'],
-            "{$addressType}.state"        => ['required'],
-            "{$addressType}.postcode"     => ['required', 'numeric'],
+            "{$addressType}.country"      => core()->isCountryRequired() ? ['required'] : ['nullable'],
+            "{$addressType}.state"        => core()->isStateRequired() ? ['required'] : ['nullable'],
+            "{$addressType}.postcode"     => core()->isPostCodeRequired() ? ['required', new PostCode] : [new PostCode],
             "{$addressType}.phone"        => ['required', new PhoneNumber],
         ];
     }
@@ -439,7 +445,7 @@ class CheckoutMutation extends Controller
 
             return [
                 'success' => false,
-                'message' => trans('bagisto_graphql::app.shop.checkout.couponremove-failed'),
+                'message' => trans('bagisto_graphql::app.shop.checkout.coupon.remove-failed'),
                 'cart'    => Cart::getCart(),
             ];
         } catch (\Exception $e) {
@@ -458,7 +464,7 @@ class CheckoutMutation extends Controller
     {
         try {
             if (Cart::hasError()) {
-                throw new CustomException(trans('bagisto_graphql::app.shop.checkout.error-placing-order'));
+                throw new CustomException(trans('bagisto_graphql::app.shop.checkout.something-wrong'));
             }
 
             Cart::collectTotals();
@@ -467,20 +473,15 @@ class CheckoutMutation extends Controller
 
             $cart = Cart::getCart();
 
-            if ($redirectUrl = Payment::getRedirectUrl($cart)) {
-                return [
-                    'success'         => true,
-                    'redirect_url'    => $redirectUrl,
-                    'selected_method' => $cart->payment->method,
-                ];
-            }
-
-            $data = (new OrderResource($cart))->jsonSerialize();
-
-            $order = $this->orderRepository->create($data);
+            $orderData = (new OrderResource($cart))->jsonSerialize();
+            $order = $this->orderRepository->create($orderData);
 
             if (core()->getConfigData('general.api.pushnotification.private_key')) {
                 $this->prepareNotificationContent($order);
+            }
+            
+            if (! empty($args['is_payment_completed'])) {
+                $this->paymentHelper->createInvoice($cart, $args, $order);
             }
 
             Cart::deActivateCart();

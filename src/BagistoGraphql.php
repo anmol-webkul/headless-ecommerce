@@ -146,14 +146,14 @@ class BagistoGraphql
         $modelPath = "$path{$model->id}/";
 
         $imageDirPath = storage_path("app/public/$modelPath");
-
+        
         if (! file_exists($imageDirPath)) {
             mkdir(storage_path("app/public/$modelPath"), 0777, true);
         }
-
+        
         if (! empty($imageUrl)) {
             $validatedImg = $this->validatePath($imageUrl, 'images');
-
+            
             if ($validatedImg) {
                 $imgName = basename($imageUrl);
 
@@ -284,6 +284,54 @@ class BagistoGraphql
     public function isNotBase64($string)
     {
         return ! preg_match('/^[a-zA-Z0-9\/+]+={0,2}$/', $string) || base64_encode(base64_decode($string)) !== $string;
+    }
+
+    public function manageCustomizableOptions($product, $data)
+    {
+        if (
+            $product->type != 'simple'
+            && $product->type != 'virtual'
+        ) {
+            return [];
+        }
+
+        $customizableOptions = [];
+
+        foreach ($data['customizable_options'] as $key => $option) {
+            // Set option key
+            $optionKey = "option_{$key}";
+
+            // Prepare option array
+            $customizableOption = [
+                // Locales
+                'en' => ['label' => $option['label'] ?? ''],
+                'type' => $option['type'] ?? '',
+                'is_required' => $option['is_required'] ?? '',
+                'sort_order' => $option['sort_order'] ?? '',
+            ];
+
+            // Optional fields
+            if (isset($option['max_characters'])) {
+                $customizableOption['max_characters'] = $option['max_characters'];
+            }
+            if (isset($option['supported_file_extensions'])) {
+                $customizableOption['supported_file_extensions'] = $option['supported_file_extensions'];
+            }
+
+            // Prices/options
+            $prices = [];
+            if (! empty($option['prices'])) {
+                foreach ($option['prices'] as $priceKey => $price) {
+                    $prices["price_{$priceKey}"] = $price;
+                }
+            }
+            
+            $customizableOption['prices'] = $prices;
+
+            $customizableOptions[$optionKey] = $customizableOption;
+        }
+        
+        return $customizableOptions;
     }
 
     /**
@@ -631,6 +679,83 @@ class BagistoGraphql
         return $bundleOptions;
     }
 
+    public function manageBookingRequest($product, $data)
+    {        
+        if ($this->checkSlotFormattedRequired($data)) {
+            $slots = [];
+
+            foreach ($data['slots'] as $slot) {
+                if (
+                    isset($slot['from'])
+                    && isset($slot['to'])
+                ) {
+                    $day = $slot['day'];
+                    unset($slot['day']);
+                    $slots[$day][] = $slot;
+                }
+            }
+
+            $data['slots'] = $slots;
+        }
+
+        if (
+            $data['type'] == 'event'
+            && ! empty($data['tickets'])
+        ) {
+            $tickets = [];
+
+            foreach ($data['tickets'] as $key => $ticket) {
+                $tickets['ticket_'.$key] = [
+                    $ticket['locales'][0]['locale'] => [
+                        'name'        => $ticket['locales'][0]['name'],
+                        'description' => $ticket['locales'][0]['description'],
+                    ],
+                    'qty'                => $ticket['qty'],
+                    'price'              => $ticket['price'],
+                    'special_price'      => $ticket['special_price'],
+                    'special_price_from' => $ticket['special_price_from'],
+                    'special_price_to'   => $ticket['special_price_to'],
+                ];
+            }
+
+            $data['tickets'] = $tickets;
+        }
+
+        if (
+            $data['type'] == 'rental'
+            && ! empty($data['rental_slot'])
+        ) {
+            $data = array_merge($data, $data['rental_slot']);
+            unset($data['rental_slot']);
+        }
+
+        if (
+            $data['type'] == 'table'
+            && ! empty($data['table_slot'])
+        ) {
+            $data = array_merge($data, $data['table_slot']);
+            unset($data['table_slot']);
+        }
+        
+        return $data;
+    }
+
+    /**
+     * To check the slot formatted required
+     *
+     * @param  array  $data
+     * @return bool
+     */
+    public function checkSlotFormattedRequired($data)
+    {
+        return (
+            ($data['type'] == 'default' && $data['booking_type'] == 'many' && isset($data['slots']))
+            || ($data['type'] == 'appointment' && $data['same_slot_all_days'] == '0')
+            || ($data['type'] == 'RENTAL' && $data['same_slot_all_days'] == '0')
+        );
+    }
+
+
     /**
      *to manage the request data for Cart
      *
@@ -702,8 +827,57 @@ class BagistoGraphql
                 }
                 break;
 
+            case 'booking':
+                //Case: In case of booking product added
+                if ( isset($data['booking']) && $data['booking']) {
+                    $booking = $product->booking_products->first();
+                    
+                    if (! empty($booking->type)) {
+                        switch ($booking->type) {
+                            case 'default':
+                            case 'appointment':
+                            case 'table':
+                                if (
+                                    ! empty($data['booking']['slot'])
+                                    && is_array($data['booking']['slot'])
+                                ) {
+                                    $data['booking']['slot'] = implode("-", $data['booking']['slot']);
+                                }
+                                break;
+
+                            case 'event':
+                                if (
+                                    ! empty($data['booking']['qty'])
+                                    && is_array($data['booking']['qty'])
+                                ) {
+                                    $data['booking']['qty'] = collect($data['booking']['qty'])
+                                        ->filter(fn($ticket) => isset($ticket['ticket_id'], $ticket['quantity']))
+                                        ->pluck('quantity', 'ticket_id')
+                                        ->toArray();
+                                }
+                                break;
+                        }
+                    }
+                }
+                break;
             default:
                 break;
+        }
+        
+        if (! empty($data['customizable_options'])) {
+            $customizableOptions = [];
+
+            foreach($data['customizable_options'] as $customizableOption) {
+                if (isset($customizableOption['id'])) {
+                    $optionId = $customizableOption['id'];
+
+                    unset($customizableOption['id']);
+
+                    $customizableOptions[$optionId] = $customizableOption['value'] ?? ($customizableOption['file'] ?? null);
+                }
+            }
+
+            $data['customizable_options'] = $customizableOptions;
         }
 
         return $data;
@@ -820,7 +994,7 @@ class BagistoGraphql
         curl_setopt($chkURL, CURLOPT_NOBODY, 1);
         curl_setopt($chkURL, CURLOPT_FAILONERROR, 1);
         curl_setopt($chkURL, CURLOPT_RETURNTRANSFER, 1);
-
+        
         if (
             curl_exec($chkURL) !== false
             && $this->getImageMIMEType($imageURL, $type)
@@ -871,10 +1045,10 @@ class BagistoGraphql
     public function getPaginatorInfo(object $collection): array
     {
         return [
-            'count'        => $collection->count(),
-            'current_page' => $collection->currentPage(),
-            'last_page'    => $collection->lastPage(),
-            'total'        => $collection->total(),
+            'count'       => $collection->count(),
+            'currentPage' => $collection->currentPage(),
+            'lastPage'    => $collection->lastPage(),
+            'total'       => $collection->total(),
         ];
     }
 }

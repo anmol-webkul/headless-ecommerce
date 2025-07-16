@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Avertissement: Échec de l\'inscription du client.',
                 'success-verify'     => 'Compte créé avec succès, un e-mail a été envoyé pour vérification.',
+                'success'            => 'Succès: Client enregistré et connecté avec succès.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Avertissement : La connexion sociale est désactivée.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Adresse supprimée avec succès',
                     'not-found'              => 'Avertissement: Adresse introuvable.',
                     'update-success'         => 'Adresse mise à jour avec succès.',
+                    'already-default'        => 'Avertissement : Cette adresse est déjà définie comme adresse par défaut.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'Le paiement n\'a pas été effectué pour ce téléchargement.',
                     'download-error' => 'Le lien de téléchargement a expiré.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Succès : Demande GDPR créée avec succès.',
+                    'revoke-failed'        => 'Attention : La demande GDPR n’a pas été révoquée.',
+                    'revoked-successfully' => 'Succès : Demande GDPR révoquée avec succès.',
+                    'not-enabled'          => 'Attention : Le GDPR n\'est pas activé.',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,15 @@ return [
                 'item-add-success'    => 'Succès: Produit ajouté à la liste de comparaison avec succès.',
                 'remove-success'      => 'Succès: Article retiré avec succès de la liste de comparaison.',
                 'mass-remove-success' => 'Succès: Articles sélectionnés supprimés avec succès.',
+                'not-auth'            => 'Avertissement : Vous n\'êtes pas autorisé à effectuer cette action.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Succès: Avis créé avec succès.',
                 'delete-success'      => 'Succès: Avis supprimé avec succès.',
-                'not-found'           => 'Avertissement: Avis introuvable.',
                 'mass-delete-success' => 'Succès: Avis sélectionnés supprimés avec succès.',
+                'not-found'           => 'Avertissement: Avis introuvable.',
+                'product-not-found'   => 'Avertissement: Produit non trouvé.',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => 'Attention : facture introuvable.',
                 'product-error'  => 'Attention : produit invalide fourni.',
                 'create-success' => 'Succès : facture créée avec succès.',
+                'invalid-qty'    => 'Attention : Nous avons trouvé une quantité invalide pour les articles de la facture.',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => 'Client connecté avec succès.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Adresse du client créée avec succès.',
                 'default-update-success' => 'L\'adresse est définie comme adresse par défaut',
                 'delete-success'         => 'Adresse du client supprimée avec succès',
                 'not-found'              => 'Attention : adresse du client introuvable.',
                 'update-success'         => 'Adresse du client mise à jour avec succès.',
+                'already-default'        => 'Attention : Cette adresse est déjà définie comme adresse par défaut.',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => 'Avis supprimé avec succès',
                 'not-found'      => 'Attention : avis introuvable.',
                 'update-success' => 'Avis mis à jour avec succès.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Succès : Demande de GDPR supprimée avec succès.',
+                'not-found'      => 'Avertissement : Demande de GDPR introuvable.',
+                'update-success' => 'Demande de GDPR mise à jour avec succès.',
             ],
         ],
 

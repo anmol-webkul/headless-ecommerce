@@ -11,6 +11,7 @@ use Webkul\Customer\Repositories\CustomerGroupRepository;
 use Webkul\Customer\Repositories\CustomerNoteRepository;
 use Webkul\Customer\Repositories\CustomerRepository;
 use Webkul\GraphQLAPI\Validators\CustomException;
+use Webkul\Core\Rules\PhoneNumber;
 
 class CustomerMutation extends Controller
 {
@@ -38,8 +39,8 @@ class CustomerMutation extends Controller
             'first_name'        => 'string|required',
             'last_name'         => 'string|required',
             'gender'            => 'required',
-            'email'             => 'required|unique:customers,email',
-            'phone'             => 'unique:customers,phone',
+            'email'             => 'email|required|unique:customers,email',
+            'phone'             => ['unique:customers,phone', new PhoneNumber],
             'date_of_birth'     => 'string|before:today',
             'customer_group_id' => 'required|in:'.implode(',', $this->customerGroupRepository->pluck('id')->toArray()),
         ]);
@@ -80,8 +81,8 @@ class CustomerMutation extends Controller
             'first_name'        => 'string|required',
             'last_name'         => 'string|required',
             'gender'            => 'required',
-            'email'             => 'required|unique:customers,email,'.$args['id'],
-            'phone'             => 'unique:customers,phone,'.$args['id'],
+            'email'             => 'email|required|unique:customers,email,'.$args['id'],
+            'phone'             => ['unique:customers,phone,'.$args['id'], new PhoneNumber],
             'date_of_birth'     => 'date|before:today',
             'customer_group_id' => 'required|in:'.implode(',', $this->customerGroupRepository->pluck('id')->toArray()),
         ]);
@@ -91,6 +92,8 @@ class CustomerMutation extends Controller
         if (! $customer) {
             throw new CustomException(trans('bagisto_graphql::app.admin.customers.customers.not-found'));
         }
+
+        $args['date_of_birth'] = ! empty($args['date_of_birth']) ? Carbon::createFromTimeString(str_replace('/', '-', $args['date_of_birth']).'00:00:01')->format('Y-m-d') : '';
 
         try {
             $args['status'] = $args['status'] ?? 0;

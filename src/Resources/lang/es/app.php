@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Advertencia: Error al registrar el cliente.',
                 'success-verify'     => 'Cuenta creada correctamente, se ha enviado un correo electrónico para su verificación.',
+                'success'            => 'Éxito: Cliente registrado e iniciado sesión correctamente.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Advertencia: El inicio de sesión social está deshabilitado.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Dirección eliminada correctamente',
                     'not-found'              => 'Advertencia: No se encontró la dirección.',
                     'update-success'         => 'Dirección actualizada correctamente.',
+                    'already-default'        => 'Advertencia: Esta dirección ya está establecida como predeterminada.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'No se ha realizado el pago de esta descarga.',
                     'download-error' => 'El enlace de descarga ha caducado.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Éxito: Solicitud de GDPR creada exitosamente.',
+                    'revoke-failed'        => 'Advertencia: No se revocó la solicitud de GDPR.',
+                    'revoked-successfully' => 'Éxito: Solicitud de GDPR revocada exitosamente.',
+                    'not-enabled'          => 'Advertencia: GDPR no está habilitado.',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,15 @@ return [
                 'item-add-success'    => 'Éxito: Producto añadido con éxito a la lista de comparación.',
                 'remove-success'      => 'Éxito: Elemento eliminado con éxito de la lista de comparación.',
                 'mass-remove-success' => 'Éxito: Elementos seleccionados eliminados con éxito.',
+                'not-auth'            => 'Advertencia: No estás autorizado para realizar esta acción.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Éxito: Reseña creada correctamente.',
                 'delete-success'      => 'Éxito: Reseña eliminada correctamente.',
-                'not-found'           => 'Advertencia: No se encontró la reseña.',
                 'mass-delete-success' => 'Éxito: Reseñas seleccionadas eliminadas correctamente.',
+                'not-found'           => 'Advertencia: No se encontró la reseña.',
+                'product-not-found'   => 'Advertencia: Producto no encontrado.',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => 'Advertencia: Factura no encontrada.',
                 'product-error'  => 'Advertencia: Producto no válido proporcionado.',
                 'create-success' => 'Éxito: Factura creada correctamente.',
+                'invalid-qty'    => 'Advertencia: Encontramos una cantidad no válida para facturar artículos.',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => 'Cliente ha iniciado sesión exitosamente.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Dirección del cliente creada exitosamente.',
-                'default-update-success' => 'La dirección se ha establecido como predeterminada',
-                'delete-success'         => 'Dirección del cliente eliminada exitosamente',
+                'default-update-success' => 'La dirección se ha establecido como predeterminada.',
+                'delete-success'         => 'Dirección del cliente eliminada exitosamente.',
                 'not-found'              => 'Advertencia: Dirección del cliente no encontrada.',
                 'update-success'         => 'Dirección del cliente actualizada exitosamente.',
+                'already-default'        => 'Advertencia: Esta dirección ya está establecida como predeterminada.',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => 'Reseña eliminada exitosamente',
                 'not-found'      => 'Advertencia: Reseña no encontrada.',
                 'update-success' => 'Reseña actualizada exitosamente.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Éxito: Solicitud de GDPR eliminada con éxito.',
+                'not-found'      => 'Advertencia: Solicitud de GDPR no encontrada.',
+                'update-success' => 'Solicitud de GDPR actualizada con éxito.',
             ],
         ],
 

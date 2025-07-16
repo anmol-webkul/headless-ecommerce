@@ -1,5 +1,5 @@
 #Catalog\Product Related API
-extend type Query {
+extend type Query @guard(with: ["admin-api"]) {
     products(
         input: FilterProductsInput @spread
     ): ProductPaginatorResponse! @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Admin\\Catalog\\Products\\FilterProducts")
@@ -81,6 +81,8 @@ input UpdateProductInput {
     downloadableLinks: [UpdateDownloadableLinksInput!] @rename(attribute: "downloadable_links")
     downloadableSamples: [UpdateDownloadableSamplesInput!] @rename(attribute: "downloadable_samples")
     bundleOptions: [UpdateBundleOptionsInput!] @rename(attribute: "bundle_options")
+    booking: UpdateBookingInput
+    customizableOptions: [UpdateCustomizableOptionInput!] @rename(attribute: "customizable_options")
 }
 
 input UpdateVariantInput {
@@ -109,12 +111,41 @@ input CustomAttributeInput {
 input FilterProductsInput {
     page: Int!
     limit: Int!
-    productId: Int @rename(attribute: "product_id")
+    productId: Int @rename(attribute: "id")
     type: String
     sku: String
     name: String
     attributeFamily: Int @rename(attribute: "attribute_family")
     channel: String
+}
+
+input UpdateCustomizableOptionInput {
+    label: String!
+    type: UpdateCustomizableOptionInputTypeEnum!
+    isRequired: Boolean! @rename(attribute: "is_required")
+    sortOrder: Int! @rename(attribute: "sort_order")
+    maxCharacters: Int! @rename(attribute: "max_characters")
+    supportedFileExtensions: String! @rename(attribute: "supported_file_extensions")
+    prices: [UpdateCustomizableOptionPriceInput]!
+}
+
+input UpdateCustomizableOptionPriceInput {
+    label: String
+    price: Float!
+    sortOrder: Int @rename(attribute: "sort_order")
+}
+
+enum UpdateCustomizableOptionInputTypeEnum {
+    TEXT @enum(value: "text")
+    TEXTAREA @enum(value: "textarea")
+    CHECKBOX @enum(value: "checkbox")
+    RADIO @enum(value: "radio")
+    SELECT @enum(value: "select")
+    MULTISELECT @enum(value: "multiselect")
+    DATE @enum(value: "date")
+    DATETIME @enum(value: "datetime")
+    TIME @enum(value: "time")
+    FILE @enum(value: "file")
 }
 
 type ProductResponse {
@@ -133,7 +164,7 @@ type Product {
     name: String
     shortDescription: String @rename(attribute: "short_description")
     description: String
-    urlKey: String! @rename(attribute: "url_key")
+    urlKey: String @rename(attribute: "url_key")
     shareURL: String @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Admin\\Catalog\\Products\\ProductContent@getProductShareUrl")
     new: Boolean
     featured: Boolean
@@ -174,6 +205,7 @@ type Product {
     reviews: [Review] @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Admin\\Catalog\\Products\\ProductContent@getReviews")
     averageRating: String @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Admin\\Catalog\\Products\\ProductContent@getAverageRating")
     percentageRating: [Int] @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Admin\\Catalog\\Products\\ProductContent@getPercentageRating")
+    customizableOptions: [ProductCustomizableOption] @hasMany(relation: "customizable_options")
     customerGroupPrices: [CustomerGroupPrice] @belongsToMany(relation: "customer_group_prices")
     downloadableSamples: [ProductDownloadableSample] @hasMany(relation: "downloadable_samples")
     downloadableLinks: [ProductDownloadableLink] @hasMany(relation: "downloadable_links")
@@ -182,6 +214,41 @@ type Product {
     relatedProducts: [Product!] @belongsToMany(relation: "related_products")
     upSells: [Product] @belongsToMany(relation: "up_sells")
     crossSells: [Product] @belongsToMany(relation: "cross_sells")
+    booking: [BookingProduct] @hasMany(relation: "booking_products")
+    sameDaySlots: [BookingDaySlots!] @rename(attribute: "same_day_slots")
+    differentDaySlots: [BookingDaySlots!] @rename(attribute: "different_day_slots")
+}
+
+type ProductCustomizableOption {
+    id: Int!
+    label: String
+    productId: ID! @rename(attribute: "product_id")
+    type: String
+    isRequired: Boolean @rename(attribute: "is_required")
+    maxCharacters: Int @rename(attribute: "max_characters")
+    supportedFileExtensions: String @rename(attribute: "supported_file_extensions")
+    sortOrder: Int @rename(attribute: "sort_order")
+    product: Product @belongsTo(relation: "product")
+    translations: ProductCustomizableOptionTranslation @hasMany(relation: "translation")
+    customizableOptionPrices: [ProductCustomizableOptionPrice] @hasMany(relation: "customizable_option_prices")
+}
+
+type ProductCustomizableOptionTranslation {
+    id: Int!
+    locale: String
+    label: String
+    productCustomizableOptionId: ID! @rename(attribute: "product_customizable_option_id")
+}
+
+type ProductCustomizableOptionPrice {
+    id: Int!
+    isDefault: Boolean @rename(attribute: "is_default")
+    isUserDefined: Boolean @rename(attribute: "is_user_defined")
+    label: String
+    price: Float
+    productCustomizableOptionId: ID! @rename(attribute: "product_customizable_option_id")
+    qty: Int
+    sortOrder: Int @rename(attribute: "sort_order")
 }
 
 type ProductAttributeValue {

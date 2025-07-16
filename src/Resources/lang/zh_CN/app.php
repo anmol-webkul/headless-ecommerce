@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => '警告：客户注册失败。',
                 'success-verify'     => '账户创建成功，已发送电子邮件进行验证。',
+                'success'            => '成功：客户注册并成功登录。',
+            ],
+
+            'social-login' => [
+                'disabled' => '警告：社交登录已禁用。',
             ],
 
             'login' => [
@@ -60,10 +65,11 @@ return [
 
                 'addresses' => [
                     'create-success'         => '地址创建成功。',
-                    'default-update-success' => '地址已设置为默认',
-                    'delete-success'         => '地址已成功删除',
+                    'default-update-success' => '地址已设置为默认。',
+                    'delete-success'         => '地址已成功删除。',
                     'not-found'              => '警告：未找到地址。',
                     'update-success'         => '地址已成功更新。',
+                    'already-default'        => '警告：此地址已设置为默认。',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => '未为此下载进行付款。',
                     'download-error' => '下载链接已过期。',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => '成功：GDPR请求创建成功。',
+                    'revoke-failed'        => '警告：未能撤销GDPR请求。',
+                    'revoked-successfully' => '成功：GDPR请求撤销成功。',
+                    'not-enabled'          => '警告：GDPR未启用。',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,15 @@ return [
                 'item-add-success'    => '成功: 产品已成功添加到比较列表。',
                 'remove-success'      => '成功: 项目已成功从比较列表中删除。',
                 'mass-remove-success' => '成功: 已成功删除所选项目。',
+                'not-auth'            => '警告: 您无权执行此操作。',
             ],
 
             'reviews' => [
                 'create-success'      => '成功：评论已成功创建。',
                 'delete-success'      => '成功：评论已成功删除。',
-                'not-found'           => '警告：未找到评论。',
                 'mass-delete-success' => '成功：已成功删除选定的评论。',
+                'not-found'           => '警告：未找到评论。',
+                'product-not-found'   => '警告: 产品未找到。',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => '警告：发票未找到。',
                 'product-error'  => '警告：提供的产品无效。',
                 'create-success' => '成功：发票创建成功。',
+                'invalid-qty'    => '警告：我们发现了无效的发票项目数量。',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => '客户登录成功。',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => '客户地址创建成功。',
                 'default-update-success' => '地址已设置为默认。',
                 'delete-success'         => '客户地址删除成功。',
                 'not-found'              => '警告：未找到客户地址。',
                 'update-success'         => '客户地址更新成功。',
+                'already-default'        => '警告：此地址已设置为默认。',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => '评论删除成功。',
                 'not-found'      => '警告：未找到评论。',
                 'update-success' => '评论更新成功。',
+            ],
+
+            'gdpr' => [
+                'delete-success' => '成功：GDPR请求已成功删除。',
+                'not-found'      => '警告：未找到GDPR请求。',
+                'update-success' => 'GDPR请求已成功更新。',
             ],
         ],
 

@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Aviso: Falha no registro do cliente.',
                 'success-verify'     => 'Conta criada com sucesso, um e-mail foi enviado para verificação.',
+                'success'            => 'Sucesso: Cliente registrado e logado com sucesso.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Aviso: Login social está desativado.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Endereço excluído com sucesso',
                     'not-found'              => 'Aviso: Endereço não encontrado.',
                     'update-success'         => 'Endereço atualizado com sucesso.',
+                    'already-default'        => 'Aviso: Este endereço já está definido como padrão.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'O pagamento não foi feito para este download.',
                     'download-error' => 'O link de download expirou.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Sucesso: Pedido de GDPR criado com sucesso.',
+                    'revoke-failed'        => 'Aviso: Falha ao revogar o pedido de GDPR.',
+                    'revoked-successfully' => 'Sucesso: Pedido de GDPR revogado com sucesso.',
+                    'not-enabled'          => 'Aviso: GDPR não está ativado.',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,15 @@ return [
                 'item-add-success'    => 'Sucesso: Produto adicionado com sucesso à lista de comparação.',
                 'remove-success'      => 'Sucesso: Item removido com sucesso da lista de comparação.',
                 'mass-remove-success' => 'Sucesso: Itens selecionados excluídos com sucesso.',
+                'not-auth'            => 'Aviso: Você não está autorizado a realizar esta ação.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Sucesso: Avaliação criada com sucesso.',
                 'delete-success'      => 'Sucesso: Avaliação excluída com sucesso.',
-                'not-found'           => 'Aviso: Avaliação não encontrada.',
                 'mass-delete-success' => 'Sucesso: Avaliações selecionadas excluídas com sucesso.',
+                'not-found'           => 'Aviso: Avaliação não encontrada.',
+                'product-not-found'   => 'Aviso: Produto não encontrado.',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => 'Aviso: Fatura não encontrada.',
                 'product-error'  => 'Aviso: Produto inválido fornecido.',
                 'create-success' => 'Sucesso: Fatura criada com sucesso.',
+                'invalid-qty'    => 'Aviso: Encontramos uma quantidade inválida para itens da fatura.',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => 'Cliente logado com sucesso.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Endereço do cliente criado com sucesso.',
-                'default-update-success' => 'Endereço definido como padrão',
-                'delete-success'         => 'Endereço do cliente excluído com sucesso',
+                'default-update-success' => 'Endereço definido como padrão.',
+                'delete-success'         => 'Endereço do cliente excluído com sucesso.',
                 'not-found'              => 'Aviso: Endereço do cliente não encontrado.',
                 'update-success'         => 'Endereço do cliente atualizado com sucesso.',
+                'already-default'        => 'Aviso: Este endereço já está definido como padrão.',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => 'Avaliação excluída com sucesso',
                 'not-found'      => 'Aviso: Avaliação não encontrada.',
                 'update-success' => 'Avaliação atualizada com sucesso.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Sucesso: Solicitação de GDPR excluída com sucesso.',
+                'not-found'      => 'Aviso: Solicitação de GDPR não encontrada.',
+                'update-success' => 'Solicitação de GDPR atualizada com sucesso.',
             ],
         ],
 

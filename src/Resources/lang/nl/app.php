@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Let op: Klantregistratie mislukt.',
                 'success-verify'     => 'Account succesvol aangemaakt, een verificatie-e-mail is verzonden.',
+                'success'            => 'Succes: Klant succesvol geregistreerd en ingelogd.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Waarschuwing: Sociale login is uitgeschakeld.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Adres succesvol verwijderd.',
                     'not-found'              => 'Let op: Adres niet gevonden.',
                     'update-success'         => 'Adres succesvol bijgewerkt.',
+                    'already-default'        => 'Waarschuwing: Dit adres is al ingesteld als standaard.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'De betaling is niet voltooid voor deze download.',
                     'download-error' => 'De downloadlink is verlopen.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Succes: GDPR-verzoek succesvol aangemaakt.',
+                    'revoke-failed'        => 'Waarschuwing: GDPR-verzoek niet ingetrokken.',
+                    'revoked-successfully' => 'Succes: GDPR-verzoek succesvol ingetrokken.',
+                    'not-enabled'          => 'Waarschuwing: GDPR is niet ingeschakeld.',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,15 @@ return [
                 'item-add-success'    => 'Succes: Product succesvol toegevoegd aan de vergelijkingslijst.',
                 'remove-success'      => 'Succes: Item is succesvol verwijderd uit de vergelijkingslijst.',
                 'mass-remove-success' => 'Succes: Geselecteerde items succesvol verwijderd.',
+                'not-auth'            => 'Waarschuwing: U bent niet gemachtigd om deze actie uit te voeren.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Succes: Recensie succesvol aangemaakt.',
                 'delete-success'      => 'Succes: Recensie succesvol verwijderd.',
-                'not-found'           => 'Let op: Recensie niet gevonden.',
                 'mass-delete-success' => 'Succes: Geselecteerde recensies succesvol verwijderd.',
+                'not-found'           => 'Let op: Recensie niet gevonden.',
+                'product-not-found'   => 'Waarschuwing: Product niet gevonden.',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => 'Waarschuwing: Factuur niet gevonden.',
                 'product-error'  => 'Waarschuwing: Ongeldig product opgegeven.',
                 'create-success' => 'Succes: Factuur succesvol aangemaakt.',
+                'invalid-qty'    => 'Waarschuwing: We hebben een ongeldige hoeveelheid gevonden om factuuritems te factureren.',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => 'Klant succesvol ingelogd.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Klantadres succesvol aangemaakt.',
                 'default-update-success' => 'Adres is ingesteld als standaard.',
                 'delete-success'         => 'Klantadres succesvol verwijderd.',
                 'not-found'              => 'Waarschuwing: Klantadres niet gevonden.',
                 'update-success'         => 'Klantadres succesvol bijgewerkt.',
+                'already-default'        => 'Waarschuwing: Dit adres is al ingesteld als standaard.',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => 'Beoordeling succesvol verwijderd.',
                 'not-found'      => 'Waarschuwing: Beoordeling niet gevonden.',
                 'update-success' => 'Beoordeling succesvol bijgewerkt.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Succes: GDPR-verzoek succesvol verwijderd.',
+                'not-found'      => 'Waarschuwing: GDPR-verzoek niet gevonden.',
+                'update-success' => 'GDPR-verzoek succesvol bijgewerkt.',
             ],
         ],
 

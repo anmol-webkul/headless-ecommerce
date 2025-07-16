@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Uyarı: Müşteri kaydı başarısız oldu.',
                 'success-verify'     => 'Hesap başarıyla oluşturuldu, doğrulama için bir e-posta gönderildi.',
+                'success'            => 'Başarılı: Müşteri başarıyla kaydedildi ve giriş yaptı.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Uyarı: Sosyal giriş devre dışı bırakıldı.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Adres başarıyla silindi',
                     'not-found'              => 'Uyarı: Adres bulunamadı.',
                     'update-success'         => 'Adres başarıyla güncellendi.',
+                    'already-default'        => 'Uyarı: Bu adres zaten varsayılan olarak ayarlandı.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'Bu indirme için ödeme yapılmadı.',
                     'download-error' => 'İndirme bağlantısı süresi dolmuş.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Başarılı: GDPR isteği başarıyla oluşturuldu.',
+                    'revoke-failed'        => 'Uyarı: GDPR isteği iptal edilemedi.',
+                    'revoked-successfully' => 'Başarılı: GDPR isteği başarıyla iptal edildi.',
+                    'not-enabled'          => 'Uyarı: GDPR etkin değil.',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,15 @@ return [
                 'item-add-success'    => 'Başarı: Ürün başarıyla karşılaştırma listesine eklendi.',
                 'remove-success'      => 'Başarı: Öğe başarıyla karşılaştırma listesinden çıkarıldı.',
                 'mass-remove-success' => 'Başarı: Seçilen öğeler başarıyla silindi.',
+                'not-auth'            => 'Uyarı: Bu işlemi gerçekleştirmek için yetkili değilsiniz.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Başarılı: İnceleme başarıyla oluşturuldu.',
                 'delete-success'      => 'Başarılı: İnceleme başarıyla silindi.',
-                'not-found'           => 'Uyarı: İnceleme bulunamadı.',
                 'mass-delete-success' => 'Başarılı: Seçilen incelemeler başarıyla silindi.',
+                'not-found'           => 'Uyarı: İnceleme bulunamadı.',
+                'product-not-found'   => 'Uyarı: Ürün bulunamadı.',
             ],
         ],
 
@@ -246,6 +261,7 @@ return [
                 'not-found'      => 'Uyarı: Fatura bulunamadı.',
                 'product-error'  => 'Uyarı: Geçersiz ürün sağlandı.',
                 'create-success' => 'Başarılı: Fatura başarıyla oluşturuldu.',
+                'invalid-qty'    => 'Uyarı: Fatura öğeleri için geçersiz bir miktar bulundu.',
             ],
 
             'refunds' => [
@@ -346,12 +362,13 @@ return [
                 'login-success'        => 'Müşteri başarıyla giriş yaptı.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Müşterinin adresi başarıyla oluşturuldu.',
-                'default-update-success' => 'Adres varsayılan olarak ayarlandı',
-                'delete-success'         => 'Müşterinin adresi başarıyla silindi',
+                'default-update-success' => 'Adres varsayılan olarak ayarlandı.',
+                'delete-success'         => 'Müşterinin adresi başarıyla silindi.',
                 'not-found'              => 'Uyarı: Müşterinin adresi bulunamadı.',
                 'update-success'         => 'Müşterinin adresi başarıyla güncellendi.',
+                'already-default'        => 'Uyarı: Bu adres zaten varsayılan olarak ayarlandı.',
             ],
 
             'groups' => [
@@ -367,6 +384,12 @@ return [
                 'delete-success' => 'İnceleme başarıyla silindi',
                 'not-found'      => 'Uyarı: İnceleme bulunamadı.',
                 'update-success' => 'İnceleme başarıyla güncellendi.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Başarılı: GDPR isteği başarıyla silindi.',
+                'not-found'      => 'Uyarı: GDPR isteği bulunamadı.',
+                'update-success' => 'GDPR isteği başarıyla güncellendi.',
             ],
         ],
 

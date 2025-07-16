@@ -25,8 +25,6 @@ class CartMutation extends Controller
         protected ProductRepository $productRepository
     ) {
         Auth::setDefaultDriver('api');
-
-        $this->middleware('auth:api');
     }
 
     /**
@@ -76,12 +74,16 @@ class CartMutation extends Controller
             'quantity'   => 'required|min:1',
             'product_id' => 'required|integer|exists:products,id',
         ]);
-
+        
         try {
-            $product = $this->productRepository->findOrFail($args['product_id']);
+            $product = $this->productRepository->with('parent')->findOrFail($args['product_id']);
+
+            if (! $product->status) {
+                throw new \Exception(trans('shop::app.checkout.cart.inactive-add'));
+            }
 
             $data = bagisto_graphql()->manageInputForCart($product, $args);
-
+            
             $cart = Cart::addProduct($product, $data);
 
             return [

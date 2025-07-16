@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Warning: Customer registration failed.',
                 'success-verify'     => 'Account created successfully, an e-mail has been sent for verification.',
+                'success'            => 'Success: Customer registered and login successfully.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Warning: Social login is disabled.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Address deleted successfully',
                     'not-found'              => 'Warning: Address not found.',
                     'update-success'         => 'Address updated successfully.',
+                    'already-default'        => 'Warning: This address is already set as default.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'Payment has not been done for this download.',
                     'download-error' => 'Download link has been expired.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Success: GDPR request created successfully.',
+                    'revoke-failed'        => 'Warning: GDPR request not revoked.',
+                    'revoked-successfully' => 'Success: GDPR request revoked successfully.',
+                    'not-enabled'          => 'Warning: GDPR is not enabled.',
+                ],
             ],
 
             'compare-product' => [
@@ -108,13 +121,16 @@ return [
                 'item-add-success'    => 'Success: Product added to compare list successfully.',
                 'remove-success'      => 'Success: Item is successfully removed from the compare list.',
                 'mass-remove-success' => 'Success: Selected items deleted successfully.',
+                'not-auth'            => 'Warning: You are not authorized to perform this action.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Success: Review created successfully.',
                 'delete-success'      => 'Success: Review deleted successfully.',
-                'not-found'           => 'Warning: Review not found.',
                 'mass-delete-success' => 'Success: Selected reviews deleted successfully.',
+                'not-found'           => 'Warning: Review not found.',
+                'product-not-found'   => 'Warning: Product not found.',
+                'not-auth'            => 'Warning: You are not authorized to perform this action.',
             ],
         ],
 
@@ -216,6 +232,11 @@ return [
                         'title'                           => 'GraphQL API',
                         'private-key'                     => 'Private Key JSON File Content',
                         'info-get-private-key'            => 'Info: To Get FCM Private Key JSON File Content: <a href="https://console.firebase.google.com/" target="_blank">Click here</a>',
+                        'credentials'                     => 'Credentials',
+                        'credentials-info'                => 'Info: Used to get essential or curious data like payment method keys, client id, secret key, etc.',
+                        'username'                        => 'Username',
+                        'username-info'                   => 'Info: Used to get essential or curious data like payment method keys, client id, secret key, etc.',
+                        'password'                        => 'Password',
                     ],
 
                     'content' => [
@@ -247,6 +268,7 @@ return [
                 'not-found'      => 'Warning: Invoice not found.',
                 'product-error'  => 'Warning: Invalid product provided.',
                 'create-success' => 'Success: Invoice created successfully.',
+                'invalid-qty'    => 'Warning: We found an invalid quantity to invoice items.',
             ],
 
             'refunds' => [
@@ -347,12 +369,13 @@ return [
                 'login-success'        => 'Customer logged in successfully.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Customer\'s address created successfully.',
                 'default-update-success' => 'Address is setted as default',
                 'delete-success'         => 'Customer\'s Address deleted successfully',
                 'not-found'              => 'Warning: Customer\'s address not found.',
                 'update-success'         => 'Customer\'s address updated successfully.',
+                'already-default'        => 'Warning: This address is already set as default.',
             ],
 
             'groups' => [
@@ -368,6 +391,12 @@ return [
                 'delete-success' => 'Review deleted successfully',
                 'not-found'      => 'Warning: Review not found.',
                 'update-success' => 'Review updated successfully.',
+            ],
+
+            'gdpr' => [
+                'delete-success'       => 'Success: GDPR request deleted successfully.',
+                'not-found'            => 'Warning: GDPR request not found.',
+                'update-success'       => 'GDPR request updated successfully.',
             ],
         ],
 

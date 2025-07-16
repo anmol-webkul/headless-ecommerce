@@ -206,7 +206,7 @@ class ProductContent extends BaseFilter
         $data = $this->productConfigurableHelper->getConfigurationConfig($product);
 
         $index = [];
-
+        
         foreach ($data['index'] as $key => $attributeOptionsIds) {
             if (! isset($index[$key])) {
                 $index[$key] = [
@@ -278,7 +278,7 @@ class ProductContent extends BaseFilter
         }
 
         $data['variant_videos'] = $variantVideos;
-
+        
         return $data;
     }
 
@@ -336,11 +336,11 @@ class ProductContent extends BaseFilter
 
     /**
      * Get product share URL.
-     *
-     * @return string|null
      */
-    public function getProductShareUrl($product)
+    public function getProductShareUrl($product): ?string
     {
-        return route('shop.product_or_category.index', $product->url_key);
+        return $product->url_key
+            ? route('shop.product_or_category.index', $product->url_key)
+            : null;
     }
 }

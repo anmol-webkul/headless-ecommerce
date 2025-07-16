@@ -3,6 +3,11 @@ extend type Query {
     cartDetail: Cart @field(resolver: "Webkul\\GraphQLAPI\\Mutations\\Shop\\Customer\\CartMutation@cart")
 
     cartItems: [CartItem!] @field(resolver: "Webkul\\GraphQLAPI\\Mutations\\Shop\\Customer\\CartMutation@cartItems")
+
+    getSlots(
+        id: ID!
+        date: String!
+    ): [AvailableBootkingSlot] @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Shop\\Common\\HomePageQuery@getBookingProductSlots")
 }
 
 extend type Mutation {
@@ -30,6 +35,9 @@ input AddItemToCartInput {
     productId: ID! @rename(attribute: "product_id")
     quantity: Int!
 
+    # Used in case of Customizable Option adding Simple & Virtual Product to Cart
+    customizableOptions: [CustomizableOptionInput!] @rename(attribute: "customizable_options")
+
     # Used in case of adding Grouped Product to Cart
     selectedConfigurableOption: Int @rename(attribute: "selected_configurable_option")
     superAttribute: [ConfigurableProductInput!] @rename(attribute: "super_attribute")
@@ -42,6 +50,15 @@ input AddItemToCartInput {
 
     # Used in case of adding Bundled Product to Cart
     bundleOptions: [BundledOptionsInput!] @rename(attribute: "bundle_options")
+
+    # Used in case of adding booking Product to Cart
+    booking: BookingProductInput
+}
+
+input CustomizableOptionInput {
+    id: ID!
+    value: [String]
+    file: [Upload]
 }
 
 input ConfigurableProductInput {
@@ -58,6 +75,26 @@ input BundledOptionsInput {
     bundleOptionId: Int! @rename(attribute: "bundle_option_id")
     bundleOptionProductId: [Int!] @rename(attribute: "bundle_option_product_id")
     qty: Int
+}
+
+input BookingProductInput {
+    date: String
+    slot: BookingSlotInput
+    dateFrom: String @rename(attribute: "date_from")
+    dateTo: String @rename(attribute: "date_to")
+    qty: [EventBookingInput!]
+    note: String
+    rentingType: RentingTypeEnumForCart @rename(attribute: "renting_type")
+}
+
+input BookingSlotInput {
+    from: Int
+    to: Int
+}
+
+input EventBookingInput {
+    ticketId: Int! @rename(attribute: "ticket_id")
+    quantity: Int!
 }
 
 input UpdateItemToCartInput {
@@ -155,7 +192,7 @@ type CartItem {
     cartId: ID! @rename(attribute: "cart_id")
     taxCategoryId: ID @rename(attribute: "tax_category_id")
     appliedCartRuleIds: String @rename(attribute: "applied_cart_rule_ids")
-    additional: ItemAdditional @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Shop\\Common\\FilterItem@additional")
+    additional: JSON @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Shop\\Common\\FilterItem@additional")
     createdAt: DateTime @rename(attribute: "created_at")
     updatedAt: DateTime @rename(attribute: "updated_at")    
     formattedPrice: FormattedPrice @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Shop\\Common\\FormattedPrice@getCartItemPriceData")
@@ -168,18 +205,6 @@ type CartItem {
 type AppliedTaxRate {
     taxName: String @rename(attribute: "tax_name")
     totalAmount: String @rename(attribute: "total_amount")
-}
-
-type AdditionalSuperAttributes {
-    attributeId: ID @rename(attribute: "attribute_id")
-    optionId: ID @rename(attribute: "option_id")
-}
-
-type AdditionalAttributes {
-    optionId: ID @rename(attribute: "option_id")
-    optionLabel: String @rename(attribute: "option_label")
-    attributeCode: String @rename(attribute: "attribute_code")
-    attributeName: String @rename(attribute: "attribute_name")
 }
 
 type CartShippingRate {
@@ -205,4 +230,20 @@ type CartShippingRate {
     updatedAt: DateTime @rename(attribute: "updated_at")
     shippingAddress: Address @belongsTo(relation: "shipping_address")
     formattedPrice: FormattedPrice @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Shop\\Common\\FormattedPrice@getCartShippingRatePriceData")
+}
+
+type AvailableBootkingSlot {
+    from: String
+    to: String
+    timestamp: String
+    qty: Boolean
+    time: String
+    slots: [AvailableBootkingSlot]
+    fromTimestamp: String @rename(attribute: "from_timestamp")
+    toTimestamp: String @rename(attribute: "to_timestamp")
+}
+
+enum RentingTypeEnumForCart {
+    HOURLY @enum(value: "hourly")
+    DAILY @enum(value: "daily")
 }

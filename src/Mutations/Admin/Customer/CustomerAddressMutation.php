@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Event;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Core\Rules\PhoneNumber;
+use Webkul\Core\Rules\PostCode;
 use Webkul\Customer\Repositories\CustomerAddressRepository;
 use Webkul\Customer\Repositories\CustomerRepository;
 use Webkul\Customer\Rules\VatIdRule;
@@ -43,7 +44,7 @@ class CustomerAddressMutation extends Controller
             'last_name'    => ['string', 'required'],
             'address'      => ['string', 'required'],
             'city'         => ['string', 'required'],
-            'postcode'     => ['required', 'numeric'],
+            'postcode'     => core()->isPostCodeRequired() ? ['required', new PostCode] : [new PostCode],
             'country'      => ['required', 'in:'.implode(',', (core()->countries()->pluck('code')->toArray()))],
             'state'        => ['required', 'in:'.implode(',', (core()->states($args['country'])->pluck('code')->toArray()))],
             'phone'        => ['required', new PhoneNumber()],
@@ -52,11 +53,11 @@ class CustomerAddressMutation extends Controller
         ]);
 
         $customer = $this->customerRepository->find($args['customer_id']);
-
+        
         if (! $customer) {
             throw new CustomException(trans('bagisto_graphql::app.admin.customers.customers.not-found'));
         }
-
+        
         try {
             Event::dispatch('customer.addresses.create.before');
 
@@ -66,7 +67,7 @@ class CustomerAddressMutation extends Controller
 
             return [
                 'success' => true,
-                'message' => trans('bagisto_graphql::app.admin.customers.addressess.create-success'),
+                'message' => trans('bagisto_graphql::app.admin.customers.addresses.create-success'),
                 'address' => $customerAddress,
             ];
         } catch (\Exception $e) {
@@ -94,7 +95,7 @@ class CustomerAddressMutation extends Controller
             'last_name'    => ['string', 'required'],
             'address'      => ['string', 'required'],
             'city'         => ['string', 'required'],
-            'postcode'     => ['required', 'numeric'],
+            'postcode'     => core()->isPostCodeRequired() ? ['required', new PostCode] : [new PostCode],
             'country'      => ['required', 'in:'.implode(',', (core()->countries()->pluck('code')->toArray()))],
             'state'        => ['required', 'in:'.implode(',', (core()->states($args['country'])->pluck('code')->toArray()))],
             'phone'        => ['required', new PhoneNumber()],
@@ -111,7 +112,7 @@ class CustomerAddressMutation extends Controller
         $customerAddress = $this->customerAddressRepository->find($args['id']);
 
         if (! $customerAddress) {
-            throw new CustomException(trans('bagisto_graphql::app.admin.customers.addressess.not-found'));
+            throw new CustomException(trans('bagisto_graphql::app.admin.customers.addresses.not-found'));
         }
 
         try {
@@ -123,7 +124,7 @@ class CustomerAddressMutation extends Controller
 
             return [
                 'success' => true,
-                'message' => trans('bagisto_graphql::app.admin.customers.addressess.update-success'),
+                'message' => trans('bagisto_graphql::app.admin.customers.addresses.update-success'),
                 'address' => $customerAddress,
             ];
         } catch (\Exception $e) {
@@ -144,7 +145,11 @@ class CustomerAddressMutation extends Controller
         ]);
 
         if (! $address) {
-            throw new CustomException(trans('bagisto_graphql::app.admin.customers.addressess.not-found'));
+            throw new CustomException(trans('bagisto_graphql::app.admin.customers.addresses.not-found'));
+        }
+
+        if ($address->default_address) {
+            throw new CustomException(trans('bagisto_graphql::app.admin.customers.addresses.already-default'));
         }
 
         try {
@@ -153,16 +158,11 @@ class CustomerAddressMutation extends Controller
                 'default_address' => 1,
             ])->update(['default_address' => 0]);
 
-            $address = $this->customerAddressRepository->findOnewhere([
-                'id'          => $args['id'],
-                'customer_id' => $args['customer_id'],
-            ]);
-
             $address->update(['default_address' => 1]);
 
             return [
                 'success' => true,
-                'message' => trans('bagisto_graphql::app.admin.customers.addressess.default-update-success'),
+                'message' => trans('bagisto_graphql::app.admin.customers.addresses.default-update-success'),
                 'address' => $address,
             ];
         } catch (\Exception $e) {
@@ -182,7 +182,7 @@ class CustomerAddressMutation extends Controller
         $customerAddress = $this->customerAddressRepository->find($args['id']);
 
         if (! $customerAddress) {
-            throw new CustomException(trans('bagisto_graphql::app.admin.customers.addressess.not-found'));
+            throw new CustomException(trans('bagisto_graphql::app.admin.customers.addresses.not-found'));
         }
 
         try {
@@ -194,7 +194,7 @@ class CustomerAddressMutation extends Controller
 
             return [
                 'success' => true,
-                'message' => trans('bagisto_graphql::app.admin.customers.addressess.delete-success'),
+                'message' => trans('bagisto_graphql::app.admin.customers.addresses.delete-success'),
             ];
 
         } catch (\Exception $e) {

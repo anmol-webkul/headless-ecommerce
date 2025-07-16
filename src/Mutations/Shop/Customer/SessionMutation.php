@@ -45,6 +45,9 @@ class SessionMutation extends Controller
         try {
             $customer = bagisto_graphql()->authorize(token: $jwtToken);
 
+            $customer->device_token = $args['device_token'] ?? null;
+            
+            $customer->save();
             /**
              * Event passed to prepare cart after login.
              */
@@ -53,7 +56,7 @@ class SessionMutation extends Controller
             return [
                 'success'      => true,
                 'message'      => trans('bagisto_graphql::app.shop.customers.success-login'),
-                'access_token' => "Bearer $jwtToken",
+                'access_token' => $jwtToken,
                 'token_type'   => 'Bearer',
                 'expires_in'   => Auth::factory()->getTTL() * 60,
                 'customer'     => $customer,

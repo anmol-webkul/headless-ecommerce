@@ -2,16 +2,18 @@
 
 namespace Webkul\GraphQLAPI\Mutations\Shop\Customer;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Event;
+use Webkul\Sales\Models\Order;
+use Illuminate\Http\UploadedFile;
+use Webkul\Core\Rules\PhoneNumber;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Webkul\GraphQLAPI\Validators\CustomException;
+use Webkul\Customer\Repositories\CustomerRepository;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Webkul\Core\Repositories\SubscribersListRepository;
-use Webkul\Customer\Repositories\CustomerRepository;
-use Webkul\GraphQLAPI\Validators\CustomException;
-use Webkul\Sales\Models\Order;
 
 class AccountMutation extends Controller
 {
@@ -47,7 +49,7 @@ class AccountMutation extends Controller
     public function update(mixed $rootValue, array $args, GraphQLContext $context)
     {
         $customer = bagisto_graphql()->authorize();
-
+        
         bagisto_graphql()->validate($args, [
             'first_name'                => 'required|string',
             'last_name'                 => 'required|string',
@@ -58,8 +60,7 @@ class AccountMutation extends Controller
             'new_password_confirmation' => 'required_with:new_password',
             'current_password'          => 'required_with:new_password',
             'image.*'                   => 'mimes:bmp,jpeg,jpg,png,webp',
-            'upload_type'               => 'nullable|in:path,base64,file',
-            'phone'                     => 'required|unique:customers,phone,'.$customer->id,
+            'phone'                     => ['required', 'unique:customers,phone,'.$customer->id, new PhoneNumber],
             'subscribed_to_news_letter' => 'nullable',
         ]);
 
@@ -83,7 +84,7 @@ class AccountMutation extends Controller
             }
 
             Event::dispatch('customer.update.before');
-
+            
             if ($customer = $this->customerRepository->update($args, $customer->id)) {
                 if ($isPasswordChanged) {
                     Event::dispatch('user.admin.update-password', $customer);
@@ -98,36 +99,32 @@ class AccountMutation extends Controller
                         'channel_id'    => core()->getCurrentChannel()->id,
                         'is_subscribed' => $args['subscribed_to_news_letter'],
                         'token'         => uniqid(),
-                    ]
+                    ],
                 );
-
-                if (
-                    ! empty($args['upload_type'])
-                    && $args['upload_type'] == 'file'
-                ) {
-                    if (! empty($args['image'])) {
-                        $customer->image = $args['image']->storePublicly('customer/'.$customer->id);
-
-                        $customer->save();
-                    } else {
+                
+                if (! empty($args['image'])) {
+                    $file = $args['image'] ?? null;
+        
+                    if ($file instanceof UploadedFile) {
                         if ($customer->image) {
                             Storage::delete($customer->image);
                         }
-
-                        $customer->image = null;
+                        
+                        $customer->image = $file->store("customer/{$customer->id}");
 
                         $customer->save();
                     }
-                }
-
-                if (
-                    ! empty($args['upload_type'])
-                    && in_array($args['upload_type'], ['path', 'base64'])
-                    && ! empty($args['image_url'])
+                } else if (
+                    array_key_exists('image', $args)
+                    && is_null($args['image'])
                 ) {
-                    $args['save_path'] = 'customer/'.$customer->id;
+                    if ($customer->image) {
+                        Storage::delete($customer->image);
+                    }
 
-                    bagisto_graphql()->saveImageByURL($customer, $args, 'image_url');
+                    $customer->image = null;
+
+                    $customer->save();
                 }
 
                 return [
@@ -142,6 +139,7 @@ class AccountMutation extends Controller
             throw new CustomException($e->getMessage());
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

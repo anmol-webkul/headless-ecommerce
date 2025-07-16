@@ -92,7 +92,7 @@ type Shipment {
     updatedAt: String @rename(attribute: "updated_at")
     order: Order! @belongsTo
     items: [ShipmentItem!] @hasMany
-    inventorySource: InventorySource! @belongsTo(relation: "inventory_source")
+    inventorySource: InventorySource @belongsTo(relation: "inventory_source")
     customer: Customer @belongsTo(relation: "customer")
     address: Address @belongsTo(relation: "address")
 }
@@ -115,7 +115,7 @@ type ShipmentItem {
     productType: String @rename(attribute: "product_type")
     orderItemId: ID! @rename(attribute: "order_item_id")
     shipmentId: ID! @rename(attribute: "shipment_id")
-    additional: ItemAdditional @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Shop\\Common\\FilterItem@additional")
+    additional: JSON @field(resolver: "Webkul\\GraphQLAPI\\Queries\\Shop\\Common\\FilterItem@additional")
     createdAt: DateTime @rename(attribute: "created_at")
     updatedAt: DateTime @rename(attribute: "updated_at")
     shipment: Shipment! @belongsTo(relation: "shipment")

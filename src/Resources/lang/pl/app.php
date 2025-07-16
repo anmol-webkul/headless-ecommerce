@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Ostrzeżenie: Rejestracja klienta nie powiodła się.',
                 'success-verify'     => 'Konto zostało pomyślnie utworzone, e-mail z instrukcjami weryfikacyjnymi został wysłany.',
+                'success'            => 'Sukces: Klient został pomyślnie zarejestrowany i zalogowany.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Ostrzeżenie: Logowanie społecznościowe jest wyłączone.',
             ],
 
             'login' => [
@@ -60,10 +65,11 @@ return [
 
                 'addresses' => [
                     'create-success'         => 'Adres został pomyślnie utworzony.',
-                    'default-update-success' => 'Adres został ustawiony jako domyślny',
+                    'default-update-success' => 'Adres został ustawiony jako domyślny.',
                     'delete-success'         => 'Adres został pomyślnie usunięty.',
                     'not-found'              => 'Ostrzeżenie: Nie znaleziono adresu.',
                     'update-success'         => 'Adres został pomyślnie zaktualizowany.',
+                    'already-default'        => 'Ostrzeżenie: Ten adres jest już ustawiony jako domyślny.',
                 ],
 
                 'wishlist' => [
@@ -99,22 +105,31 @@ return [
                     'payment-error'  => 'Płatność nie została dokonana za ten plik do pobrania.',
                     'download-error' => 'Link do pobrania wygasł.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Sukces: Żądanie GDPR zostało pomyślnie utworzone.',
+                    'revoke-failed'        => 'Ostrzeżenie: Nie udało się odwołać żądania GDPR.',
+                    'revoked-successfully' => 'Sukces: Żądanie GDPR zostało pomyślnie odwołane.',
+                    'not-enabled'          => 'Ostrzeżenie: GDPR nie jest włączone.',
+                ],
             ],
 
             'compare-product' => [
-                'not-found'           => 'Ostrzeżenie: Produkt do porównania nie znaleziony.',
-                'product-not-found'   => 'Ostrzeżenie: Produkt nie znaleziony.',
+                'not-found'           => 'Ostrzeżenie: Produkt do porównania nie został znaleziony.',
+                'product-not-found'   => 'Ostrzeżenie: Produkt nie został znaleziony.',
                 'already-added'       => 'Ostrzeżenie: Produkt został już dodany do listy porównawczej.',
                 'item-add-success'    => 'Sukces: Produkt został pomyślnie dodany do listy porównawczej.',
                 'remove-success'      => 'Sukces: Przedmiot został pomyślnie usunięty z listy porównawczej.',
                 'mass-remove-success' => 'Sukces: Wybrane przedmioty zostały pomyślnie usunięte.',
+                'not-auth'            => 'Ostrzeżenie: Nie masz uprawnień do wykonania tej operacji.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Sukces: Recenzja została pomyślnie utworzona.',
                 'delete-success'      => 'Sukces: Recenzja została pomyślnie usunięta.',
-                'not-found'           => 'Ostrzeżenie: Nie znaleziono recenzji.',
                 'mass-delete-success' => 'Sukces: Wybrane recenzje zostały pomyślnie usunięte.',
+                'not-found'           => 'Ostrzeżenie: Nie znaleziono recenzji.',
+                'product-not-found'   => 'Ostrzeżenie: Produkt nie znaleziony.',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => 'Ostrzeżenie: Faktura nie została znaleziona.',
                 'product-error'  => 'Ostrzeżenie: Podano nieprawidłowy produkt.',
                 'create-success' => 'Sukces: Faktura została pomyślnie utworzona.',
+                'invalid-qty'    => 'Ostrzeżenie: Znaleziono nieprawidłową ilość do fakturowania pozycji.',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => 'Klient został pomyślnie zalogowany.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Adres klienta został pomyślnie utworzony.',
                 'default-update-success' => 'Adres został ustawiony jako domyślny.',
                 'delete-success'         => 'Adres klienta został pomyślnie usunięty.',
                 'not-found'              => 'Ostrzeżenie: Adres klienta nie został znaleziony.',
                 'update-success'         => 'Adres klienta został pomyślnie zaktualizowany.',
+                'already-default'        => 'Ostrzeżenie: Ten adres jest już ustawiony jako domyślny.',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => 'Recenzja została pomyślnie usunięta.',
                 'not-found'      => 'Ostrzeżenie: Recenzja nie została znaleziona.',
                 'update-success' => 'Recenzja została pomyślnie zaktualizowana.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Succes: GDPR-verzoek succesvol verwijderd.',
+                'not-found'      => 'Waarschuwing: GDPR-verzoek niet gevonden.',
+                'update-success' => 'GDPR-verzoek succesvol bijgewerkt.',
             ],
         ],
 

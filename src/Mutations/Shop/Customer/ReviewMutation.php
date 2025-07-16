@@ -9,6 +9,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Webkul\GraphQLAPI\Validators\CustomException;
 use Webkul\Product\Repositories\ProductReviewAttachmentRepository;
 use Webkul\Product\Repositories\ProductReviewRepository;
+use Webkul\Product\Repositories\ProductRepository;
 
 class ReviewMutation extends Controller
 {
@@ -18,6 +19,7 @@ class ReviewMutation extends Controller
      * @return void
      */
     public function __construct(
+        protected ProductRepository $productRepository,
         protected ProductReviewRepository $productReviewRepository,
         protected ProductReviewAttachmentRepository $productReviewAttachmentRepository
     ) {
@@ -33,12 +35,26 @@ class ReviewMutation extends Controller
      */
     public function store(mixed $rootValue, array $args, GraphQLContext $context)
     {
+        if (
+            ! core()->getConfigData('catalog.products.review.customer_review')
+            || (
+                ! core()->getConfigData('catalog.products.review.guest_review')
+                && ! auth()->guard('api')->user()
+            )
+        ) {
+            return [
+                'success' => false,
+                'message' => trans('bagisto_graphql::app.shop.customers.reviews.not-auth'),
+            ];
+        }
+
         bagisto_graphql()->validate($args, [
-            'comment'     => 'required',
-            'rating'      => 'required|numeric|min:1|max:5',
-            'title'       => 'required',
-            'product_id'  => 'required',
-            'attachments' => 'array',
+            'comment'       => 'required',
+            'rating'        => 'required|numeric|min:1|max:5',
+            'title'         => 'required',
+            'product_id'    => 'required',
+            'attachments'   => 'array',
+            'attachments.*' => 'nullable|file|mimetypes:image/*,video/*',
         ]);
 
         try {
@@ -51,28 +67,17 @@ class ReviewMutation extends Controller
                 ]);
             }
 
+            $product = $this->productRepository->find($args['product_id']);
+
+            if (! $product) {
+                throw new CustomException(trans('bagisto_graphql::app.shop.customers.reviews.product-not-found'));
+            }
+
             $args['status'] = 'pending';
-
-            $attachments = $args['attachments'];
-
+            
             $review = $this->productReviewRepository->create($args);
 
-            foreach ($attachments as $attachment) {
-                if (! empty($attachment['upload_type'])) {
-                    if ($attachment['upload_type'] == 'base64') {
-                        $attachment['save_path'] = "review/{$review->id}";
-
-                        $records = bagisto_graphql()->storeReviewAttachment($attachment);
-
-                        $this->productReviewAttachmentRepository->create([
-                            'path'      => $records['path'],
-                            'review_id' => $review->id,
-                            'type'      => $records['img_details'][0],
-                            'mime_type' => $records['img_details'][1],
-                        ]);
-                    }
-                }
-            }
+            $this->productReviewAttachmentRepository->upload($args['attachments'] ?? [], $review);
 
             return [
                 'success' => true,

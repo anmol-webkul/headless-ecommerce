@@ -26,6 +26,11 @@ return [
             'signup' => [
                 'error-registration' => 'Warnung: Kundenregistrierung fehlgeschlagen.',
                 'success-verify'     => 'Konto erfolgreich erstellt, eine E-Mail zur Verifizierung wurde gesendet.',
+                'success'            => 'Erfolg: Kunde erfolgreich registriert und eingeloggt.',
+            ],
+
+            'social-login' => [
+                'disabled' => 'Warnung: Social Login ist deaktiviert.',
             ],
 
             'login' => [
@@ -64,6 +69,7 @@ return [
                     'delete-success'         => 'Adresse erfolgreich gelöscht.',
                     'not-found'              => 'Warnung: Adresse nicht gefunden.',
                     'update-success'         => 'Adresse erfolgreich aktualisiert.',
+                    'already-default'        => 'Warnung: Diese Adresse ist bereits als Standard festgelegt.',
                 ],
 
                 'wishlist' => [
@@ -99,6 +105,13 @@ return [
                     'payment-error'  => 'Die Zahlung für diesen Download wurde nicht durchgeführt.',
                     'download-error' => 'Der Download-Link ist abgelaufen.',
                 ],
+
+                'gdpr' => [
+                    'create-success'       => 'Erfolg: GDPR-Anfrage erfolgreich erstellt.',
+                    'revoke-failed'        => 'Warnung: GDPR-Anfrage konnte nicht widerrufen werden.',
+                    'revoked-successfully' => 'Erfolg: GDPR-Anfrage erfolgreich widerrufen.',
+                    'not-enabled'          => 'Warnung: GDPR ist nicht aktiviert.',
+                ],
             ],
 
             'compare-product' => [
@@ -106,15 +119,17 @@ return [
                 'product-not-found'   => 'Warnung: Produkt nicht gefunden.',
                 'already-added'       => 'Warnung: Produkt bereits zur Vergleichsliste hinzugefügt.',
                 'item-add-success'    => 'Erfolg: Produkt erfolgreich zur Vergleichsliste hinzugefügt.',
-                'remove-success'      => 'Erfolg: Artikel wurde erfolgreich aus der Vergleichsliste entfernt.',
-                'mass-remove-success' => 'Erfolg: Ausgewählte Artikel wurden erfolgreich gelöscht.',
+                'remove-success'      => 'Erfolg: Artikel erfolgreich aus der Vergleichsliste entfernt.',
+                'mass-remove-success' => 'Erfolg: Ausgewählte Artikel erfolgreich gelöscht.',
+                'not-auth'            => 'Warnung: Sie sind nicht berechtigt, diese Aktion durchzuführen.',
             ],
 
             'reviews' => [
                 'create-success'      => 'Erfolg: Bewertung erfolgreich erstellt.',
                 'delete-success'      => 'Erfolg: Bewertung erfolgreich gelöscht.',
-                'not-found'           => 'Warnung: Bewertung nicht gefunden.',
                 'mass-delete-success' => 'Erfolg: Ausgewählte Bewertungen erfolgreich gelöscht.',
+                'not-found'           => 'Warnung: Bewertung nicht gefunden.',
+                'product-not-found'   => 'Warnung: Produkt nicht gefunden.',
             ],
         ],
 
@@ -247,6 +262,7 @@ return [
                 'not-found'      => 'Warnung: Rechnung nicht gefunden.',
                 'product-error'  => 'Warnung: Ungültiges Produkt angegeben.',
                 'create-success' => 'Erfolg: Rechnung erfolgreich erstellt.',
+                'invalid-qty'    => 'Warnung: Es wurde eine ungültige Menge für Rechnungsartikel gefunden.',
             ],
 
             'refunds' => [
@@ -347,12 +363,13 @@ return [
                 'login-success'        => 'Kunde erfolgreich eingeloggt.',
             ],
 
-            'addressess' => [
+            'addresses' => [
                 'create-success'         => 'Kundenadresse erfolgreich erstellt.',
                 'default-update-success' => 'Adresse wurde als Standard festgelegt.',
                 'delete-success'         => 'Kundenadresse erfolgreich gelöscht.',
                 'not-found'              => 'Warnung: Kundenadresse nicht gefunden.',
                 'update-success'         => 'Kundenadresse erfolgreich aktualisiert.',
+                'already-default'        => 'Warnung: Diese Adresse ist bereits als Standard festgelegt.',
             ],
 
             'groups' => [
@@ -368,6 +385,12 @@ return [
                 'delete-success' => 'Bewertung erfolgreich gelöscht.',
                 'not-found'      => 'Warnung: Bewertung nicht gefunden.',
                 'update-success' => 'Bewertung erfolgreich aktualisiert.',
+            ],
+
+            'gdpr' => [
+                'delete-success' => 'Erfolg: GDPR-Anfrage erfolgreich gelöscht.',
+                'not-found'      => 'Warnung: GDPR-Anfrage nicht gefunden.',
+                'update-success' => 'GDPR-Anfrage erfolgreich aktualisiert.',
             ],
         ],
 

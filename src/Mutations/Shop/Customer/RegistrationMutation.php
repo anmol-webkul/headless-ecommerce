@@ -41,8 +41,17 @@ class RegistrationMutation extends Controller
             'first_name' => 'string|required',
             'last_name'  => 'string|required',
             'password'   => 'min:6|required|confirmed',
+            'remember'   => 'boolean',
         ]);
 
+        if (
+            core()->getConfigData('general.gdpr.settings.enabled')
+            && core()->getConfigData('general.gdpr.agreement.enabled')
+            && empty($args['agreement'])
+        ) {
+            throw new CustomException(trans('bagisto_graphql::app.shop.customers.signup.agreement-required'));
+        }
+        
         $this->create($args);
 
         if (core()->getConfigData('customer.settings.email.verification')) {
@@ -64,12 +73,28 @@ class RegistrationMutation extends Controller
      */
     public function socialSignIn(mixed $rootValue, array $args, GraphQLContext $context)
     {
+        $socialLoginTypeStatus = [
+            'facebook' => 'enable_facebook',
+            'twitter'  => 'enable_twitter',
+            'google'   => 'enable_google',
+            'linkedin' => 'enable_linkedin-openid',
+            'github'   => 'enable_github',
+        ];
+
         bagisto_graphql()->validate($args, [
             'email'       => 'email|required',
             'first_name'  => 'string|required',
             'last_name'   => 'string|required',
             'signup_type' => 'string|required',
         ]);
+
+        if (
+            $args['signup_type'] != 'truecaller'
+            && in_array($args['signup_type'], array_keys($socialLoginTypeStatus))
+            && core()->getConfigData('customer.settings.social_login.' . $socialLoginTypeStatus[$args['signup_type']]) != "1"
+        ) {
+            throw new CustomException(trans('bagisto_graphql::app.shop.customers.social-login.disabled'));
+        }
 
         if ($args['signup_type'] == 'truecaller') {
             bagisto_graphql()->validate($args, [
@@ -202,8 +227,10 @@ class RegistrationMutation extends Controller
 
         return [
             'success'      => true,
-            'message'      => trans('bagisto_graphql::app.shop.customers.success-login'),
-            'access_token' => "Bearer $jwtToken",
+            'message'      => isset($data['signup_type']) 
+            ? trans('bagisto_graphql::app.shop.customers.success-login')
+            : trans('bagisto_graphql::app.shop.customers.signup.success'),
+            'access_token' => $jwtToken,
             'token_type'   => 'Bearer',
             'expires_in'   => Auth::factory()->getTTL() * 60,
             'customer'     => $this->customerRepository->find($loginCustomer->id),
