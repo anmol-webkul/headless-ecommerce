@@ -2,6 +2,19 @@
 
 This changelog consists of the bug & security fixes and new features included in the releases listed below.
 
+v2.3.1 (17th of July, 2025) - Release
+
+#  Bug Fixes
+
+* #521 [Fixed] - slots coming null.
+
+* #523 [Fixed] - custom options max character query giving error.
+
+* #526 [Fixed] - The themeCustomization query does not have any localization keys like en, hi, or de.
+
+* #530 [Fixed] - <?php There is a blank line before the tagThere is a blank.
+
+
 v2.3.0 (16th of May, 2025) - Release
 
 #  Enhancements
